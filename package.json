@@ -1,0 +1,27 @@
+{
+  "name": "coindex",
+  "version": "0.2.0",
+  "description": "a cryptocurrency index for the masses",
+  "main": "index.js",
+  "repository": "https://github.com/jeffreywescott/coindex",
+  "author": "Jeffrey Wescott <jeffrey.wescott@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": "~8.9"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/bsb -make-world",
+    "build:clean": "./node_modules/.bin/bsb -clean-world",
+    "dev": "./node_modules/.bin/bsb -make-world -w",
+    "rebalance": "yarn run build && node index"
+  },
+  "dependencies": {
+    "@glennsl/bs-json": "^1.3.1",
+    "bs-fetch": "^0.2.1",
+    "bs-node": "reasonml-community/bs-node",
+    "bs-platform": "^3.0.0",
+    "json2csv": "^4.0.3",
+    "minimist": "^1.2.0",
+    "node-fetch": "^2.1.2"
+  }
+}

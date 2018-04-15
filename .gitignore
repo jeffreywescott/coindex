@@ -1,0 +1,13 @@
+.DS_Store
+*.lock
+*.log
+.env*
+lib
+dist
+node_modules
+tmp
+*.env
+.merlin
+.vscode
+npm-debug.log.*
+binance.json
