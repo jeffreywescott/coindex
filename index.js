@@ -5,17 +5,15 @@ const parseArgs = require('minimist')
 const {parse: json2csv} = require('json2csv')
 
 const {getTopCryptoCoins, getBinanceAccountInfo} = require('./lib/js/src/Fetchers.bs')
-// FIXME: yuck!
-const {Binance: [_, __, getApiKeys]} = require('./lib/js/src/Config.bs')
+const {projectRoot} = require('./lib/js/src/Config.bs')
+const {Binance: [_, __, getApiKeys]} = require('./lib/js/src/Config.bs') // FIXME: yuck -- array?!
 
 const NUM_COINS = 15
-const BINANCE_KEYS_FILENAME = path.resolve(__dirname, 'binance.json')
-const TOP_COINS_FILENAME = path.resolve(__dirname, 'tmp', 'top-coins.csv')
-const BALANCES_FILENAME = path.resolve(__dirname, 'tmp', 'binance-balances.csv')
+const TOP_COINS_FILENAME = path.resolve(projectRoot, 'tmp', 'top-coins.csv')
+const BALANCES_FILENAME = path.resolve(projectRoot, 'tmp', 'binance-balances.csv')
 
 const writeSnapshots = async () => {
-  // FIXME: yuck!
-  const [apiKey, secret] = getApiKeys()
+  const [apiKey, secret] = getApiKeys(projectRoot) // FIXME: yuck -- array?!
 
   const topCoinData = await getTopCryptoCoins(NUM_COINS)
   const topCoinCsv = json2csv(topCoinData)

@@ -16,15 +16,20 @@ module Binance = {
         secret: json |> field("secret", string),
       };
   };
-  let getApiKeys = () => {
-    let dirname: option(string) = [%bs.node __dirname];
-    let dir =
-      switch (dirname) {
-      | Some(dirname) => dirname
-      | None => "."
-      };
-    let binanceKeysFilename = Node.Path.join([|dir, "..", "binance.json"|]);
+  let getApiKeys = projectRoot => {
+    let binanceKeysFilename = Node.Path.join([|projectRoot, "binance.json"|]);
     let bytes = Node.Fs.readFileSync(binanceKeysFilename, `utf8);
     bytes |> Json.parseOrRaise |> Decode.apiKeys;
   };
 };
+
+[@bs.val] [@bs.scope ("process", "mainModule")]
+external mainModulePaths : array(string) = "paths";
+
+let projectRoot =
+  switch (
+    mainModulePaths[0] |> Js.String.split("/node_modules") |> Js.Array.shift
+  ) {
+  | Some(string) => string
+  | None => raise(Not_found)
+  };
