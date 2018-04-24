@@ -69,7 +69,7 @@ module Account = {
   module Encode = {
     let assetEncode = (r: Asset.t) => {
       let canonicalSymbol =
-        Asset.getCanonicalSymbol(~symbol=r.symbol, ~host=Host.Binance);
+        Symbol.getCanonical(~symbol=r.symbol, ~host=Host.Binance);
       Json.Encode.object_([
         ("symbol", Json.Encode.string(canonicalSymbol)),
         ("balance", Json.Encode.float(r.balance)),

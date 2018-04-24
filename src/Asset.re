@@ -1,10 +1,4 @@
 type t = {
-  symbol: string,
+  symbol: Symbol.t,
   balance: float,
 };
-
-let getCanonicalSymbol = (~symbol: string, ~host: Host.t) =>
-  switch (symbol, host) {
-  | ("BCC", Host.Binance) => "BCH"
-  | _ => symbol
-  };

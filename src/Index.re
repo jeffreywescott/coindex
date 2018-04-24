@@ -1,6 +1,6 @@
 module Coin = {
   type t = {
-    symbol: string,
+    symbol: Symbol.t,
     priceUsd: float,
     marketCapUsd: float,
   };
