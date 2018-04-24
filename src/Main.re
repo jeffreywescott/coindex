@@ -23,7 +23,9 @@ let writeSnapshots = () => {
          let balances = json |> Binance.Account.Decode.balancesDecode;
          resolve(
            balances
-           |> Js.Array.filter((asset: Asset.t) => asset.balance > 0.0)
+           |> Js.Array.filter((asset: Portfolio.Asset.t) =>
+                asset.balance > 0.0
+              )
            |> Binance.Account.Encode.balancesEncode,
          );
        })

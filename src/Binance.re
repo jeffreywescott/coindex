@@ -58,7 +58,7 @@ module Api = {
 
 module Account = {
   module Decode = {
-    let assetDecode = json : Asset.t =>
+    let assetDecode = json : Portfolio.Asset.t =>
       Json.Decode.{
         symbol: json |> field("asset", string),
         balance: json |> field("free", string) |> Js.Float.fromString,
@@ -67,7 +67,7 @@ module Account = {
       Json.Decode.(json |> field("balances", array(assetDecode)));
   };
   module Encode = {
-    let assetEncode = (r: Asset.t) => {
+    let assetEncode = (r: Portfolio.Asset.t) => {
       let canonicalSymbol =
         Symbol.getCanonical(~symbol=r.symbol, ~host=Host.Binance);
       Json.Encode.object_([
