@@ -22,7 +22,26 @@ module Api = {
   };
 };
 
-let numTopCoins = 15;
+module TopCoinsIndex = {
+  let numCoins = 15;
+  module Decode = {
+    let coinDecode = json : Index.Coin.t =>
+      Json.Decode.{
+        symbol: json |> field("symbol", string),
+        marketCap:
+          json |> field("market_cap_usd", string) |> Js.Float.fromString,
+      };
+    let indexDecode = json => Json.Decode.(json |> array(coinDecode));
+  };
+  module Encode = {
+    let coinEncode = (r: Index.Coin.t) =>
+      Json.Encode.object_([
+        ("symbol", Json.Encode.string(r.symbol)),
+        ("marketCap", Json.Encode.float(r.marketCap)),
+      ]);
+    let indexEncode = coins => coins |> Json.Encode.array(coinEncode);
+  };
+};
 
 let topCoinsFilename =
   Node.Path.join([|Config.projectRoot, "tmp", "top-coins.csv"|]);
