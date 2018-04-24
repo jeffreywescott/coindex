@@ -2,19 +2,22 @@
 
 module Api = {
   let baseUrl = "https://api.binance.com/api/v3";
-  type credentials = {
-    apiKey: string,
-    secret: string,
-  };
-  let decodeCredentials = json =>
-    Json.Decode.{
-      apiKey: json |> field("apiKey", string),
-      secret: json |> field("secret", string),
+  module Credentials = {
+    type t = {
+      apiKey: string,
+      secret: string,
     };
-  let getCredentials = projectRoot => {
-    let binanceKeysFilename = Node.Path.join([|projectRoot, "binance.json"|]);
-    let bytes = Node.Fs.readFileSync(binanceKeysFilename, `utf8);
-    bytes |> Json.parseOrRaise |> decodeCredentials;
+    let decode = json =>
+      Json.Decode.{
+        apiKey: json |> field("apiKey", string),
+        secret: json |> field("secret", string),
+      };
+    let load = projectRoot => {
+      let binanceKeysFilename =
+        Node.Path.join([|projectRoot, "binance.json"|]);
+      let bytes = Node.Fs.readFileSync(binanceKeysFilename, `utf8);
+      bytes |> Json.parseOrRaise |> decode;
+    };
   };
   module Sign = {
     type hmac;
@@ -54,12 +57,8 @@ module Api = {
 };
 
 module Account = {
-  type asset = {
-    symbol: string,
-    balance: float,
-  };
   module Decode = {
-    let assetDecode = json =>
+    let assetDecode = json : Asset.t =>
       Json.Decode.{
         symbol: json |> field("asset", string),
         balance: json |> field("free", string) |> Js.Float.fromString,
@@ -68,11 +67,14 @@ module Account = {
       Json.Decode.(json |> field("balances", array(assetDecode)));
   };
   module Encode = {
-    let assetEncode = r =>
+    let assetEncode = (r: Asset.t) => {
+      let canonicalSymbol =
+        Asset.getCanonicalSymbol(~symbol=r.symbol, ~host=Host.Binance);
       Json.Encode.object_([
-        ("symbol", Json.Encode.string(r.symbol)),
+        ("symbol", Json.Encode.string(canonicalSymbol)),
         ("balance", Json.Encode.float(r.balance)),
       ]);
+    };
     let balancesEncode = balances =>
       balances |> Json.Encode.array(assetEncode);
   };
