@@ -60,23 +60,15 @@ module Account = {
   module Decode = {
     let assetDecode = json : Portfolio.Asset.t =>
       Json.Decode.{
-        symbol: json |> field("asset", string),
+        symbol:
+          Symbol.getCanonical(
+            ~symbol=json |> field("asset", string),
+            ~host=Host.Binance,
+          ),
         balance: json |> field("free", string) |> Js.Float.fromString,
       };
-    let balancesDecode = json =>
+    let portfolioDecode = json =>
       Json.Decode.(json |> field("balances", array(assetDecode)));
-  };
-  module Encode = {
-    let assetEncode = (r: Portfolio.Asset.t) => {
-      let canonicalSymbol =
-        Symbol.getCanonical(~symbol=r.symbol, ~host=Host.Binance);
-      Json.Encode.object_([
-        ("symbol", Json.Encode.string(canonicalSymbol)),
-        ("balance", Json.Encode.float(r.balance)),
-      ]);
-    };
-    let balancesEncode = balances =>
-      balances |> Json.Encode.array(assetEncode);
   };
 };
 

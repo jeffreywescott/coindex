@@ -27,21 +27,16 @@ module TopCoinsIndex = {
   module Decode = {
     let coinDecode = json : Index.Coin.t =>
       Json.Decode.{
-        symbol: json |> field("symbol", string),
+        symbol:
+          Symbol.getCanonical(
+            ~symbol=json |> field("symbol", string),
+            ~host=Host.Binance,
+          ),
         priceUsd: json |> field("price_usd", string) |> Js.Float.fromString,
         marketCapUsd:
           json |> field("market_cap_usd", string) |> Js.Float.fromString,
       };
     let indexDecode = json => Json.Decode.(json |> array(coinDecode));
-  };
-  module Encode = {
-    let coinEncode = (r: Index.Coin.t) =>
-      Json.Encode.object_([
-        ("symbol", Json.Encode.string(r.symbol)),
-        ("priceUsd", Json.Encode.float(r.priceUsd)),
-        ("marketCapUsd", Json.Encode.float(r.marketCapUsd)),
-      ]);
-    let indexEncode = coins => coins |> Json.Encode.array(coinEncode);
   };
 };
 
