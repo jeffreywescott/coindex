@@ -28,7 +28,8 @@ module TopCoinsIndex = {
     let coinDecode = json : Index.Coin.t =>
       Json.Decode.{
         symbol: json |> field("symbol", string),
-        marketCap:
+        priceUsd: json |> field("price_usd", string) |> Js.Float.fromString,
+        marketCapUsd:
           json |> field("market_cap_usd", string) |> Js.Float.fromString,
       };
     let indexDecode = json => Json.Decode.(json |> array(coinDecode));
@@ -37,7 +38,8 @@ module TopCoinsIndex = {
     let coinEncode = (r: Index.Coin.t) =>
       Json.Encode.object_([
         ("symbol", Json.Encode.string(r.symbol)),
-        ("marketCap", Json.Encode.float(r.marketCap)),
+        ("priceUsd", Json.Encode.float(r.priceUsd)),
+        ("marketCapUsd", Json.Encode.float(r.marketCapUsd)),
       ]);
     let indexEncode = coins => coins |> Json.Encode.array(coinEncode);
   };
