@@ -7,7 +7,8 @@ A cryptocurrency index for the masses.
 ### MVP
 
 - use the [CoinMarketCap API][coinmarketcap-api] to figure out the relative market cap of the top N coins (e.g., N = 15)
-- use the [binance API][binance-api] to rebalance the user's portfolio based on relative market cap
+- use the [binance API][binance-api] to query the portfolio of the user
+- write a CSV file of sells and buys to make on binance
 
 ## Getting Started
 
