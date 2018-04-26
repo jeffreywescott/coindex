@@ -36,24 +36,32 @@ let fetchIndexAndPortfolio = () => {
     Binance.Api.Credentials.load(Config.projectRoot);
   Js.Promise.(
     all2((
-      CoinMarketCap.Api.Fetchers.getTopCryptoCoins(15),
+      CoinMarketCap.Api.Fetchers.getAllCoins(),
       Binance.Api.Fetchers.getPortfolio(apiKey, secret),
     ))
     |> then_(responses => {
-         let (topSymbols, portfolio) = responses;
+         let (allCoins, portfolio) = responses;
+         let topCoins = Js.Array.slice(~start=0, ~end_=15, allCoins);
+         let topSymbols =
+           Js.Array.map((coin: Index.Coin.t) => coin.symbol, topCoins);
          let portfolioSymbols =
            Js.Array.map(
              (asset: Portfolio.Asset.t) => asset.symbol,
              portfolio,
            );
-         let allSymbols = Js.Array.concat(topSymbols, portfolioSymbols);
+         let relevantSymbols = Js.Array.concat(topSymbols, portfolioSymbols);
          let uniqueSymbols =
            Js.Array.filteri(
-             (symbol, i) => Js.Array.indexOf(symbol, allSymbols) == i,
-             allSymbols,
+             (symbol, i) => Js.Array.indexOf(symbol, relevantSymbols) == i,
+             relevantSymbols,
            );
-         CryptoCompare.Api.Fetchers.getIndex(uniqueSymbols)
-         |> then_(index => resolve((index, portfolio)));
+         let index =
+           Js.Array.filter(
+             (coin: Index.Coin.t) =>
+               Js.Array.indexOf(coin.symbol, uniqueSymbols) >= 0,
+             allCoins,
+           );
+         resolve((index, portfolio));
        })
   );
 };
