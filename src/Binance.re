@@ -31,7 +31,20 @@ module Api = {
     };
   };
   module Fetchers = {
-    let getAccountInfo = (apiKey, secret) => {
+    module Decode = {
+      let assetDecode = json : Portfolio.Asset.t =>
+        Json.Decode.{
+          symbol:
+            Symbol.getCanonical(
+              ~symbol=json |> field("asset", string),
+              ~host=Host.Binance,
+            ),
+          balance: json |> field("free", string) |> Js.Float.fromString,
+        };
+      let portfolioDecode = json =>
+        Json.Decode.(json |> field("balances", array(assetDecode)));
+    };
+    let getPortfolio = (apiKey, secret) => {
       let now = Js.Date.now();
       let qs = {j|timestamp=$(now)|j};
       let signature = Sign.signHmacSha256(qs, secret);
@@ -50,27 +63,17 @@ module Api = {
             ),
           )
           |> then_(ApiUtils.responseJsonOrError)
+          |> then_(json => {
+               let assets = json |> Decode.portfolioDecode;
+               resolve(
+                 Js.Array.filter(
+                   (asset: Portfolio.Asset.t) => asset.balance > 0.0,
+                   assets,
+                 ),
+               );
+             })
         )
       );
     };
   };
 };
-
-module Account = {
-  module Decode = {
-    let assetDecode = json : Portfolio.Asset.t =>
-      Json.Decode.{
-        symbol:
-          Symbol.getCanonical(
-            ~symbol=json |> field("asset", string),
-            ~host=Host.Binance,
-          ),
-        balance: json |> field("free", string) |> Js.Float.fromString,
-      };
-    let portfolioDecode = json =>
-      Json.Decode.(json |> field("balances", array(assetDecode)));
-  };
-};
-
-let balancesFilename =
-  Node.Path.join([|Config.projectRoot, "tmp", "binance-balances.csv"|]);

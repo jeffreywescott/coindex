@@ -1,3 +1,4 @@
 type t =
   | Binance
-  | CoinMarketCap;
+  | CoinMarketCap
+  | CryptoCompare;
