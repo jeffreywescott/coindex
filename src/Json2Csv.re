@@ -1,1 +1,0 @@
-[@bs.module "json2csv"] external json2csv : Js.Json.t => string = "parse";
