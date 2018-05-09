@@ -12,7 +12,7 @@
   "scripts": {
     "build": "./node_modules/.bin/bsb -make-world",
     "build:clean": "./node_modules/.bin/bsb -clean-world",
-    "dev": "./node_modules/.bin/bsb -make-world -w",
+    "build:watch": "./node_modules/.bin/bsb -make-world -w",
     "rebalance": "yarn run build && node lib/js/src/Main.bs.js",
     "test": "./node_modules/.bin/tape lib/js/test/**/*.bs.js | ./node_modules/.bin/tap-spec"
   },
