@@ -5,7 +5,8 @@
       "dir": "src"
     },
     {
-      "dir": "test"
+      "dir": "test",
+      "type": "dev"
     }
   ],
   "package-specs": {
