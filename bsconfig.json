@@ -1,9 +1,13 @@
 {
   "name": "coindex",
-  "sources": {
-    "dir": "src",
-    "subdirs": true
-  },
+  "sources": [
+    {
+      "dir": "src"
+    },
+    {
+      "dir": "test"
+    }
+  ],
   "package-specs": {
     "module": "commonjs"
   },
@@ -11,6 +15,7 @@
   "bs-dependencies": [
     "bs-fetch",
     "bs-node",
+    "bs-tape",
     "@glennsl/bs-json"
   ],
   "bsc-flags": [
