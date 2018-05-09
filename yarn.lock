@@ -37,9 +37,9 @@ bs-platform@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-3.0.0.tgz#38f200730db52fdea37819376b6ac3dfb20244c0"
 
-bs-tape@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/bs-tape/-/bs-tape-0.1.1.tgz#5d54bb0036935b0d84fb89c8e98e1de2dc99ca6c"
+bs-tape@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/bs-tape/-/bs-tape-0.2.1.tgz#70781927811a8202e179157723160a2ee8a85b2d"
   dependencies:
     tape "^4.9.0"
 

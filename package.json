@@ -26,7 +26,7 @@
     "node-fetch": "^2.1.2"
   },
   "devDependencies": {
-    "bs-tape": "^0.1.1",
+    "bs-tape": "^0.2.1",
     "tap-spec": "^4.1.1"
   }
 }
