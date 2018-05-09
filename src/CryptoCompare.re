@@ -4,16 +4,16 @@ module Api = {
   let baseUrl = "https://min-api.cryptocompare.com/data";
   module Fetchers = {
     module Decode = {
-      let coinDecode = json : Index.Coin.t =>
-        Json.Decode.{
-          symbol:
-            Symbol.getCanonical(
-              ~symbol=json |> field("FROMSYMBOL", string),
-              ~host=Host.CryptoCompare,
-            ),
-          priceUsd: json |> field("PRICE", float),
-          marketCapUsd: json |> field("MKTCAP", float),
-        };
+      let coinDecode = json : Index.Coin.t => {
+        symbol:
+          Symbol.getCanonical(
+            ~symbol=
+              json |> Json.Decode.field("FROMSYMBOL", Json.Decode.string),
+            ~host=Host.CryptoCompare,
+          ),
+        priceUsd: json |> Json.Decode.field("PRICE", Json.Decode.float),
+        marketCapUsd: json |> Json.Decode.field("MKTCAP", Json.Decode.float),
+      };
       let usdDecode = json => json |> Json.Decode.field("USD", coinDecode);
       let rawDecode = (coin, json) =>
         json |> Json.Decode.field(coin, usdDecode);
