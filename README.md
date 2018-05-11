@@ -1,5 +1,7 @@
 # coindex
 
+[![CircleCI](https://circleci.com/gh/jeffreywescott/coindex.svg?style=svg)](https://circleci.com/gh/jeffreywescott/coindex) [![Coverage Status](https://coveralls.io/repos/github/jeffreywescott/coindex/badge.svg?branch=master)](https://coveralls.io/github/jeffreywescott/coindex?branch=master)
+
 A cryptocurrency index for the masses.
 
 ## What is this?
