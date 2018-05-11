@@ -1,4 +1,4 @@
-Tape.test("Api", t => {
+Tape.test("Binance.Api", t => {
   t.plan(3);
   t.test("Credentials.decode", t2 => {
     t2.plan(2);
